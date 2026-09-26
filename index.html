@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#23a55b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Detektif Cilik — Penjaga Bumi | KB/TK Islam Al-Azhar 4</title>
+<style>
+:root{
+  --green:#23a55b;--green2:#126f43;--mint:#e7fff0;--blue:#c9f3ff;
+  --yellow:#fff1a8;--orange:#ffad32;--red:#e94b4b;--ink:#173c4a;
+  --white:#fff;--shadow:0 9px 0 #b8dbc8,0 16px 30px rgba(30,90,70,.12)
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Trebuchet MS",Arial,sans-serif;color:var(--ink);
+ background:linear-gradient(135deg,#bdf0ff,#fff0ad 52%,#d9ffd9);min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer}
+.topbar{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+ padding:12px 18px;background:#ffffffee;backdrop-filter:blur(8px);box-shadow:0 4px 16px #2e775622;font-weight:900}
+body.doa-open{background:#dff7d4}
+body.doa-open .topbar{display:none}
+.topbrand{font-size:18px;color:#176d4c}.score{background:#fff5bd;border-radius:999px;padding:8px 14px}
+.screen{display:none;max-width:1180px;margin:auto;padding:20px 18px 42px}.screen.active{display:block}
+.speak{border:0;background:#fff0a0;border-radius:50%;width:40px;height:40px;font-size:20px;vertical-align:middle;
+ box-shadow:0 3px 0 #d2b63b;margin-left:7px}
+.speak:active{transform:translateY(2px);box-shadow:none}
+
+/* ===== Keyboard sentuh IFP ===== */
+.touch-keyboard{margin:14px auto 4px;max-width:760px;background:#eef8f3;border:4px solid #c8e6d6;border-radius:24px;padding:12px;box-shadow:inset 0 2px 0 #fff}
+.touch-row{display:flex;gap:7px;justify-content:center;margin:6px 0}
+.touch-key{flex:1;min-width:42px;min-height:52px;border:0;border-radius:14px;background:#fff;color:#173c4a;font-weight:1000;font-size:20px;box-shadow:0 4px 0 #c3d5ce;touch-action:manipulation;user-select:none;-webkit-user-select:none;cursor:pointer;pointer-events:auto;-webkit-tap-highlight-color:transparent}.touch-key:hover{filter:brightness(.97);transform:translateY(-1px)}.touch-key.pressed{transform:translateY(3px);box-shadow:0 1px 0 #c3d5ce}
+.touch-key:active{transform:translateY(3px);box-shadow:0 1px 0 #c3d5ce}
+.touch-key.action{background:#dff4ff}.touch-key.space{flex:5}.touch-key.wide{flex:2}
+.keyboard-label{text-align:center;font-weight:900;color:#52716a;margin:4px 0 8px}
+.name-box input:focus{outline:5px solid #ffd84d;outline-offset:2px}
+
+.title{text-align:center;font-size:clamp(32px,5vw,54px);color:#176d4c;margin:10px 0}
+.subtitle{text-align:center;font-weight:900;font-size:18px}
+.hero{position:relative;overflow:hidden;border-radius:34px;padding:26px;
+ background:linear-gradient(135deg,#ddfff0,#c2f3ff 50%,#fff2b5);border:4px solid #fff;box-shadow:var(--shadow)}
+.hero:before{content:"";position:absolute;inset:-50%;background:radial-gradient(circle,#fff8 0 2%,transparent 3%);
+ background-size:42px 42px;animation:drift 20s linear infinite}
+.hero-content{position:relative;z-index:2}
+.float{position:absolute;z-index:2;font-size:42px;pointer-events:none;animation:float 4s ease-in-out infinite}
+.f1{left:3%;top:13%}.f2{right:4%;top:11%;animation-delay:.8s}.f3{left:7%;bottom:10%;animation-delay:1.5s}
+.f4{right:10%;bottom:8%;animation-delay:.3s}.f5{left:48%;top:3%;font-size:28px;animation-delay:1.9s}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(6deg)}}
+@keyframes drift{from{transform:translate(0,0)}to{transform:translate(44px,44px)}}
+/* ===== Ornamen Robot Bumi: tampil di semua halaman dan ikut berbicara ===== */
+.robot-ornament{position:fixed;right:18px;bottom:18px;z-index:80;width:92px;height:112px;pointer-events:none;filter:drop-shadow(0 8px 10px rgba(20,90,70,.22));animation:robotFloat 3.2s ease-in-out infinite}.robot-ornament .robot-antenna{position:absolute;left:43px;top:0;width:6px;height:17px;background:#176d4c;border-radius:6px}.robot-ornament .robot-light{position:absolute;left:38px;top:-5px;width:16px;height:16px;border-radius:50%;background:#ffd84d;border:3px solid #fff;box-shadow:0 0 10px rgba(255,216,77,.7)}.robot-ornament .robot-head{position:absolute;left:8px;top:14px;width:76px;height:58px;border-radius:20px;background:linear-gradient(145deg,#dffaff,#b9e9f5);border:5px solid #176d4c;box-shadow:inset 0 -7px 0 rgba(23,109,76,.08)}.robot-ornament .robot-eye{position:absolute;top:18px;width:12px;height:12px;border-radius:50%;background:#176d4c;box-shadow:0 0 0 3px #fff}.robot-ornament .robot-eye.left{left:16px}.robot-ornament .robot-eye.right{right:16px}.robot-ornament .robot-mouth{position:absolute;left:27px;bottom:10px;width:24px;height:7px;border-radius:0 0 14px 14px;background:#176d4c;transition:.12s}.robot-ornament .robot-body{position:absolute;left:17px;top:72px;width:58px;height:34px;border-radius:14px 14px 18px 18px;background:#dffaff;border:5px solid #176d4c}.robot-ornament .robot-heart{position:absolute;left:38px;top:80px;font-size:13px}.robot-ornament.talking .robot-mouth{height:16px;border-radius:50%;animation:robotMouth .18s steps(2,end) infinite}.robot-ornament.talking .robot-head{animation:robotTalk .32s ease-in-out infinite alternate}.robot-ornament.talking .robot-light{animation:robotBlink .45s ease-in-out infinite alternate}.robot-ornament .robot-bubble{position:absolute;right:84px;top:18px;min-width:74px;max-width:190px;padding:7px 10px;border-radius:14px 14px 4px 14px;background:#fff;border:3px solid #d8f2e2;color:#176d4c;font-size:12px;font-weight:1000;opacity:0;transform:translateY(5px) scale(.96);transition:.18s;white-space:normal;box-shadow:0 4px 12px rgba(20,90,70,.12)}.robot-ornament.talking .robot-bubble{opacity:1;transform:translateY(0) scale(1)}@keyframes robotFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}@keyframes robotMouth{0%,100%{transform:scaleY(.55)}50%{transform:scaleY(1)}}@keyframes robotTalk{from{transform:translateY(0)}to{transform:translateY(-2px)}}@keyframes robotBlink{from{opacity:.55}to{opacity:1}}
+@media(max-width:760px){.robot-ornament{right:8px;bottom:8px;transform:scale(.78);transform-origin:bottom right}.robot-ornament.talking{animation:robotFloat 3.2s ease-in-out infinite}.robot-ornament .robot-bubble{right:76px;max-width:150px}}
+.profile{display:flex;gap:24px;align-items:center;background:linear-gradient(135deg,#ffffff,#effff6);border-radius:30px;padding:18px 22px;margin:16px 0;box-shadow:var(--shadow);border:4px solid #fff;min-height:330px}
+.teacher{width:330px;height:330px;border-radius:24px;object-fit:cover;object-position:center top;border:5px solid #ffe16a;box-shadow:0 10px 24px #26734b33;flex:0 0 auto;background:#eaf7ef;display:block}
+.profile .teacher-fallback{object-fit:contain;padding:0}
+.intro-video-wrap{width:min(48vw,520px);min-width:360px;aspect-ratio:16/9;border-radius:24px;overflow:hidden;background:#102e2a;border:5px solid #fff;box-shadow:0 10px 24px #26734b33;flex:0 0 auto}
+.intro-video{width:100%;height:100%;border:0;display:block}
+.bin{padding:12px;min-height:190px;display:flex;align-items:center;justify-content:center}
+.bin img{width:min(210px,92%);height:215px;object-fit:contain;display:block;filter:drop-shadow(0 7px 5px rgba(0,0,0,.16));border-radius:18px}.bin-option-label{display:inline-block;margin-top:8px;padding:7px 14px;border-radius:999px;background:#fff;font-size:16px;font-weight:1000;box-shadow:0 3px 0 rgba(0,0,0,.10)}.bin:disabled{opacity:.82;cursor:default}
+@media(max-width:760px){.intro-video-wrap{width:100%;min-width:0}.profile{flex-direction:column;text-align:center}.teacher-info{width:100%}}
+
+.profile-badge{display:inline-flex;align-items:center;gap:8px;background:#fff1a8;border-radius:999px;padding:8px 14px;font-weight:1000;color:#176d4c;margin-bottom:8px}
+.teacher-info h2{margin:0 0 5px;color:#176d4c}.teacher-info p{margin:4px 0;font-weight:800}
+.map-card,.card{background:#fff;border-radius:28px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}
+.map-title{text-align:center;font-size:27px;color:#176d4c;font-weight:1000}
+.map-hint{text-align:center;font-weight:800;color:#58706c}
+.map-card.focus{outline:5px solid #f2c94c;animation:focusMap 1.2s ease-in-out 2}
+@keyframes focusMap{50%{transform:scale(1.01);box-shadow:0 0 0 10px rgba(242,201,76,.18),var(--shadow)}}
+.map{display:flex;align-items:flex-start;gap:5px;overflow-x:auto;padding:15px 8px 20px;scrollbar-width:thin}
+.node{min-width:102px;text-align:center;border:0;background:transparent;color:var(--ink);font-weight:900}
+.dot{width:62px;height:62px;border-radius:50%;margin:auto;display:flex;align-items:center;justify-content:center;
+ background:#e5eaec;border:5px solid #adb9bd;font-size:28px;transition:.2s}
+.node.done .dot{background:#c8f4d7;border-color:#20a45a}.node.current .dot{background:#fff0a4;border-color:#f2a700;animation:pulse 1.7s infinite}
+.node.locked{opacity:.62}.node:hover .dot{transform:scale(1.1)}
+.line{min-width:28px;height:8px;border-radius:9px;background:#cbd3d5;margin-top:28px}.line.done{background:#35b967}
+.label{font-size:12px;margin-top:7px;line-height:1.2}
+@keyframes pulse{50%{box-shadow:0 0 0 11px #f2a70000}}
+.name-box{text-align:center}.name-box input{width:min(440px,100%);padding:14px;border:4px solid #9bd4b4;border-radius:18px;font-size:21px}
+.btn{border:0;border-radius:19px;padding:13px 20px;margin:6px;background:#25a65d;color:#fff;font-weight:1000;font-size:18px;
+ box-shadow:0 5px 0 #176f43;transition:.12s}.btn:active{transform:translateY(4px);box-shadow:none}
+.btn.next{background:#ffad32;box-shadow:0 5px 0 #bc7510}.btn.back{background:#607d8b;box-shadow:0 5px 0 #42545d}
+.btn.red{background:#e94b4b;box-shadow:0 5px 0 #aa2c2c}
+.menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+.menu{position:relative;border:4px solid #fff;border-radius:24px;background:linear-gradient(135deg,#fff,#effff5);
+ padding:18px;min-height:105px;text-align:left;display:flex;align-items:center;gap:14px;box-shadow:0 6px 0 #c2dfd0;font-weight:1000;color:var(--ink)}
+.menu:hover{transform:translateY(-2px)}.menu .ico{font-size:42px}.menu .txt{flex:1}.menu .small{display:block;font-size:13px;color:#59716d;margin-top:4px}
+.check{position:absolute;right:12px;bottom:8px;background:#20a45a;color:#fff;border-radius:50%;width:29px;height:29px;display:none;align-items:center;justify-content:center}
+.menu.done .check{display:flex}.menu.done{border-color:#6bd190;background:linear-gradient(135deg,#e8fff0,#fff)}
+.notice{background:#f4fff8;border:3px dashed #6cc891;border-radius:20px;padding:14px;font-weight:900}
+.media{width:100%;border-radius:22px;background:#102e2a;max-height:520px}
+.cover{border-radius:25px;background:linear-gradient(135deg,#dfffee,#c7f5ff,#fff1b0);padding:30px;text-align:center;min-height:220px;
+ display:flex;flex-direction:column;justify-content:center;align-items:center;border:5px solid #fff}
+.cover .big{font-size:80px}.doa-cover{padding:12px;overflow:hidden}.doa-cover img{display:block;width:100%;max-height:520px;object-fit:contain;border-radius:18px;border:4px solid #fff;box-shadow:0 5px 15px rgba(0,0,0,.12)}.cover h2{margin:8px 0;color:#176d4c}
+.bins{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.bin{border:5px dashed #49b97a;border-radius:26px;padding:20px;min-height:170px;background:#eaffef;font-size:22px;font-weight:1000;text-align:center}
+.bin.anorg{background:#eef8ff;border-color:#4ba8d5}.bin.b3{background:#fff0f0;border-color:#e65b5b}
+.trash-row{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.trash{width:150px;min-height:120px;border:4px solid #fff;border-radius:22px;background:#fff9dc;box-shadow:0 5px #d9c77b;
+ display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:22px;font-weight:1000;touch-action:none}
+.trash.selected{outline:6px solid #2ba866;transform:scale(1.04)}
+.feedback{min-height:60px;text-align:center;font-size:25px;font-weight:1000;margin:12px}.ok{color:#14934d}.bad{color:#d83939}
+.game-area{background:#f8fffb;border-radius:24px;padding:18px;border:4px solid #d8f2e2}.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.choice{border:4px solid #fff;background:#fff7c9;border-radius:20px;padding:16px;font-weight:1000;font-size:20px;box-shadow:0 5px #dfc96a}
+.choice.correct{background:#c9f6d8;border-color:#28a95d}.choice.wrong{background:#ffd2d2;border-color:#e64d4d}
+.game-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.badge{background:#fff0a0;border-radius:999px;padding:8px 13px;font-weight:1000}
+canvas{width:100%;max-width:560px;height:auto;display:block;margin:10px auto;border:5px solid #fff;border-radius:24px;background:#fff}
+.palette{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.swatch{width:44px;height:44px;border-radius:50%;border:4px solid #fff;box-shadow:0 3px #bbb}
+.eval-q{background:#fff;border-radius:22px;padding:18px;margin:12px 0;border:4px solid #d8f2e2}.eval-q h3{margin:0 0 10px}
+.cert{position:relative;overflow:hidden;background:linear-gradient(135deg,#fffdf4,#fff8df);border:16px solid #d3a72f;border-radius:18px;padding:44px 54px 40px;text-align:center;box-shadow:inset 0 0 0 4px #fff,inset 0 0 0 9px #b78618}.cert:before{content:'';position:absolute;inset:16px;border:3px solid #b78618;border-radius:10px;pointer-events:none}.cert:after{content:'★';position:absolute;right:30px;top:22px;width:58px;height:58px;border-radius:50%;background:linear-gradient(145deg,#f5d45c,#c99216);border:4px solid #fff;box-shadow:0 2px 0 #9d7414;color:#fff;font-size:31px;line-height:50px;text-shadow:0 1px 2px #795800}.cert-ribbon{position:absolute;left:22px;top:0;width:58px;height:104px;z-index:2;filter:drop-shadow(0 2px 2px #8b1111)}.cert-ribbon:before,.cert-ribbon:after{content:'';position:absolute;top:0;width:29px;height:104px}.cert-ribbon:before{left:0;background:linear-gradient(to bottom,#e3262e 0 33%,#fff 33% 66%,#e3262e 66%);clip-path:polygon(0 0,100% 0,82% 82%,50% 67%,18% 82%)}.cert-ribbon:after{right:0;background:linear-gradient(to bottom,#fff 0 33%,#e3262e 33% 66%,#fff 66%);clip-path:polygon(0 0,100% 0,82% 82%,50% 67%,18% 82%)}.cert-medal{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:2px auto 10px;background:radial-gradient(circle,#fff5a8 0 22%,#e0ad27 23% 64%,#b87d10 65%);border:5px solid #fff;box-shadow:0 2px 7px #9c7b2b;color:#8b5e00;font-size:34px;position:relative;z-index:2}.cert-photo-wrap{width:190px;height:190px;margin:16px auto;border:8px solid #d3a72f;border-radius:14px;padding:5px;background:#fff;box-shadow:0 3px 10px #bca76a;display:flex;align-items:center;justify-content:center;position:relative;z-index:2}.cert-photo{width:100%;height:100%;object-fit:cover;border-radius:8px}.cert-photo-placeholder{font-weight:900;color:#8c6c19;font-size:18px;line-height:1.25}.cert .name{display:inline-block;min-width:300px;padding:9px 24px;border-bottom:3px solid #c69a25;font-size:30px;font-weight:1000;color:#183d70;position:relative;z-index:2}.certificate-note{position:relative;z-index:2}.cert-actions{position:relative;z-index:3}
+.cert .name{font-size:42px;color:#176d4c;font-weight:1000}.finish{font-size:54px}
+.nav{text-align:center;margin:20px 0}.tiny{font-size:13px;color:#607b76;font-weight:800}
+
+/* ===== Penyempurnaan Misi Interaktif ===== */
+.mission-banner{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#effff5,#e5f8ff);border:4px solid #fff;border-radius:24px;padding:14px 18px;box-shadow:0 5px 0 #c8e3d4;margin-bottom:14px}
+.mission-avatar{font-size:48px;filter:drop-shadow(0 4px 2px #0002)}
+.mission-copy{flex:1}.mission-copy strong{display:block;font-size:22px;color:#176d4c}.mission-copy span{font-weight:800;color:#5d7770}
+.mission-progress{height:12px;background:#dce9e5;border-radius:99px;overflow:hidden;margin-top:8px}.mission-progress>i{display:block;height:100%;background:linear-gradient(90deg,#20a45a,#56c8e9);border-radius:99px;transition:width .35s}
+.sim-instructions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}.sim-step{background:#fff;border:3px solid #d7eee1;border-radius:18px;padding:12px;text-align:center;font-weight:900}.sim-step b{display:block;font-size:28px}
+.trash.dragging{transform:scale(1.06) rotate(-2deg);outline:5px solid #f2c94c}
+.bin.over{transform:scale(1.03);box-shadow:0 0 0 7px #ffd85a88}
+.feedback-card{display:flex;align-items:center;justify-content:center;gap:12px;min-height:74px;margin-top:12px;border-radius:20px;background:#f6fffa;border:3px solid #d8f2e2;font-weight:1000}
+.feedback-card.ok{background:#dffff0;border-color:#55c982}.feedback-card.bad{background:#fff0f0;border-color:#ef7777}
+.game-levels{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}.level-pill{border:3px solid #d6ebe1;background:#fff;border-radius:999px;padding:8px 15px;font-weight:1000}.level-pill.active{background:#fff0a8;border-color:#e7b82f}.level-pill .speak{width:30px;height:30px;font-size:15px;margin-left:2px;box-shadow:0 2px 0 #d2b63b}.sim-step .speak{width:30px;height:30px;font-size:15px;margin-left:2px}.certificate-note .speak{width:30px;height:30px;font-size:15px;margin-left:3px}
+.game-progress{height:18px;background:#e5eeea;border-radius:99px;overflow:hidden;margin:10px 0 16px;border:3px solid #fff}.game-progress i{display:block;height:100%;background:linear-gradient(90deg,#23a55b,#38b8df);transition:width .35s}
+.score-pop{animation:scorePop .45s ease}.score-burst{position:fixed;left:50%;top:35%;transform:translate(-50%,-50%);z-index:200;background:#fff0a0;border:5px solid #fff;border-radius:28px;padding:16px 24px;font-size:30px;font-weight:1000;box-shadow:0 10px 0 #d2b63b;animation:burst .75s ease forwards;pointer-events:none}
+@keyframes scorePop{50%{transform:scale(1.18)}}@keyframes burst{0%{opacity:0;transform:translate(-50%,-35%) scale(.6)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}100%{opacity:0;transform:translate(-50%,-75%) scale(1)}}
+.eval-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#f5fff9;border:3px solid #d8f2e2;border-radius:20px;padding:14px;margin-bottom:14px;font-weight:1000}.eval-count{font-size:18px;color:#176d4c}
+.cert-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}.certificate-note{background:#effff6;border-radius:18px;padding:12px;font-weight:800;margin-top:12px}
+@media(max-width:760px){.profile{flex-direction:column;text-align:center;min-height:0}.teacher{width:min(88vw,360px);height:min(88vw,360px);object-fit:cover}.profile-badge{margin-left:auto;margin-right:auto}.sim-instructions{grid-template-columns:1fr}.mission-banner{align-items:flex-start}.mission-avatar{font-size:38px}}
+@media(max-width:760px){.profile{flex-direction:column;text-align:center;min-height:0}.teacher{width:min(88vw,360px);height:min(88vw,360px);object-fit:cover}.profile-badge{margin-left:auto;margin-right:auto}.profile{flex-direction:column;text-align:center}.menu-grid{grid-template-columns:1fr}.bins{grid-template-columns:1fr}.choices{grid-template-columns:1fr}.teacher{width:190px;height:220px}.map{justify-content:flex-start}}
+
+.doa-screen{width:100%;max-width:none;padding:0;margin:0 auto;background:#dff7d4}.doa-stage{position:relative;width:min(100vw,1536px);max-width:1536px;margin:0 auto;line-height:0;overflow:hidden;border-radius:0 0 34px 34px;box-shadow:0 14px 35px rgba(30,90,70,.18);background:#dff7d4;aspect-ratio:3/2}.doa-poster{display:block;width:100%;height:100%;object-fit:contain;object-position:center top;user-select:none}.doa-hot{position:absolute;border:0;background:transparent;color:transparent;cursor:pointer;z-index:5}.doa-hot:focus-visible,.doa-speak:focus-visible{outline:5px solid #ffd52e;outline-offset:3px}.home-hot{right:2.2%;top:2.2%;width:8%;height:12%}.audio-hot{left:34.5%;bottom:8.3%;width:6%;height:10%}.sound-hot{right:8.8%;bottom:8.2%;width:6%;height:10%}.back-hot{left:2%;bottom:2%;width:15%;height:10%}.next-hot{right:1.5%;bottom:2%;width:16%;height:10%}.doa-speak{position:absolute;z-index:6;border:0;background:#fff1a8;border:4px solid #fff;border-radius:50%;width:54px;height:54px;font-size:25px;box-shadow:0 4px 0 #c7aa34;cursor:pointer}.text-speak{left:27%;top:29%;}.doa-real-audio{position:absolute;left:38%;right:10%;bottom:9.4%;height:7%;display:flex;align-items:center;pointer-events:none}.doa-progress{width:100%;display:flex;align-items:center;gap:10px;color:#fff;font-weight:1000;font-size:15px;text-shadow:0 2px 3px #05609a;line-height:1}.doa-progress input{flex:1;accent-color:#18a8ff;pointer-events:auto;cursor:pointer}.doa-progress span{min-width:42px;text-align:center}.doa-stage.playing .audio-hot{background:rgba(255,255,255,.01)}
+@media(max-width:760px){.profile{flex-direction:column;text-align:center;min-height:0}.teacher{width:min(88vw,360px);height:min(88vw,360px);object-fit:cover}.profile-badge{margin-left:auto;margin-right:auto}.doa-screen{padding:0;margin:0;width:100%}.doa-stage{width:100%;border-radius:0;box-shadow:none}.text-speak{width:44px;height:44px;left:26%;top:30%}.doa-real-audio{left:38%;right:9%;bottom:9.5%;height:6%}.doa-progress{font-size:10px;gap:4px}.doa-progress span{min-width:30px}.back-hot,.next-hot{bottom:1.5%;height:9%}}
+
+/* ===== Materi Pembelajaran — tampilan edukasi ===== */
+.materi-screen{max-width:1280px;padding-top:18px}
+.materi-hero{position:relative;overflow:hidden;border-radius:32px;padding:24px 28px;background:linear-gradient(135deg,#d9fff0 0%,#c9f5ff 55%,#fff3b0 100%);border:5px solid #fff;box-shadow:var(--shadow);margin-bottom:18px}
+.materi-hero:before{content:"🌿";position:absolute;right:25px;top:10px;font-size:72px;opacity:.18;transform:rotate(12deg)}
+.materi-hero h1{margin:0;color:#176d4c;font-size:clamp(30px,4vw,48px)}
+.materi-hero p{margin:7px 0 0;font-size:18px;font-weight:900;max-width:850px}
+.mission-strip{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:15px 0 4px}
+.mission-step{background:#fff;border:3px solid #bde8d0;border-radius:999px;padding:8px 14px;font-weight:1000;color:#176d4c}
+.mission-step.active{background:#fff0a0;border-color:#e5b93d}
+.mission-arrow{font-weight:1000;color:#68a889}
+.robot-card{display:flex;align-items:center;gap:16px;background:#fff;border:4px solid #d8f2e2;border-radius:26px;padding:16px 18px;margin:16px 0;box-shadow:0 5px 0 #c6e6d4}
+.robot-avatar{width:78px;height:78px;flex:0 0 78px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#bff3ff,#dfffe9);border:4px solid #fff;box-shadow:0 4px 10px #3c9a7030}
+.robot-card h2{margin:0 0 5px;color:#176d4c}.robot-card p{margin:0;font-weight:800;line-height:1.45}
+.video-card{background:#fff;border-radius:30px;padding:18px;border:5px solid #fff;box-shadow:var(--shadow);margin:16px 0}
+.video-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}.video-heading h2{margin:0;color:#176d4c}
+.video-frame{position:relative;background:#0e332d;border-radius:24px;padding:7px;box-shadow:inset 0 0 0 3px #1b5b4d}.video-frame .media{display:block;max-height:600px;min-height:280px;object-fit:contain}
+.youtube-card{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:#fff4f4;border:4px solid #ffd1d1;border-radius:24px;padding:15px 18px;margin-top:14px}.youtube-card p{margin:0;font-weight:900}
+.learn-title{text-align:center;color:#176d4c;margin:24px 0 12px;font-size:28px}
+.waste-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.waste-card{position:relative;min-height:210px;border-radius:28px;padding:18px;text-align:center;border:5px solid #fff;box-shadow:0 6px 0 #c7dfd2;background:#eaffef}
+.waste-card.anorg{background:#edf8ff;box-shadow:0 6px 0 #c9dfea}.waste-card.b3{background:#fff0f0;box-shadow:0 6px 0 #e7c8c8}
+.waste-icon{font-size:55px;line-height:1;margin:4px 0 10px}.waste-card h3{margin:4px 0 8px;font-size:23px}.waste-card p{font-weight:800;line-height:1.4;margin:0}
+.waste-list{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:12px}.waste-chip{background:#fff;border-radius:999px;padding:6px 10px;font-size:13px;font-weight:1000;border:2px solid #cce5d7}
+.materi-tip{margin-top:18px;background:#fff9d8;border:4px dashed #e4c84e;border-radius:24px;padding:16px;text-align:center;font-weight:1000}
+.materi-tip .tip-big{font-size:34px;display:block;margin-bottom:4px}
+@media(max-width:800px){.waste-grid{grid-template-columns:1fr}.robot-card{align-items:flex-start}.video-frame .media{min-height:190px}.mission-arrow{display:none}}
+.youtube-only-card{background:linear-gradient(135deg,#fff7d8,#e8fff3,#e7f8ff);border:5px solid #fff;border-radius:28px;padding:32px;text-align:center;box-shadow:0 7px 0 #c8dfd3;margin-top:12px}.youtube-icon{font-size:76px}.youtube-only-card h2{color:#176d4c;margin:8px}.youtube-only-card p{font-weight:800}.doa-online-top{max-width:1536px;margin:0 auto 10px;background:linear-gradient(135deg,#fff7d8,#e8fff3,#e7f8ff);border:4px solid #fff;border-radius:22px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 6px 0 #c8dfd3;position:relative;z-index:20}.doa-online-top strong{display:block;font-size:22px;color:#176d4c}.doa-online-top span{display:block;font-weight:800;color:#55716a}.doa-top-actions{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}.youtube-direct{white-space:nowrap;text-decoration:none;text-align:center}.continue-doa{white-space:nowrap;border:0;cursor:pointer}.doa-visible-back{position:absolute;left:2%;bottom:2%;z-index:8;border:0;border-radius:18px;padding:12px 20px;background:#607d8b;color:#fff;font-weight:1000;font-size:18px;box-shadow:0 5px 0 #42545d;cursor:pointer}.doa-visible-back:active{transform:translateY(4px);box-shadow:none}.doa-online-card{max-width:900px;margin:14px auto 24px;background:linear-gradient(135deg,#fff7d8,#e8fff3,#e7f8ff);border:4px solid #fff;border-radius:24px;padding:16px;text-align:center;box-shadow:0 7px 0 #c8dfd3}.doa-online-card h2{margin:0 0 6px;color:#176d4c}.doa-online-card p{margin:4px 0 10px;font-weight:800}@media(max-width:700px){.doa-online-top{margin:0 8px 8px;padding:10px;flex-direction:column;text-align:center}.doa-top-actions{width:100%}.youtube-direct,.continue-doa{width:100%}.doa-visible-back{font-size:15px;padding:10px 14px}.doa-online-card{margin:10px 10px 18px;padding:13px}}
+.doa-visible-back{position:absolute;left:2%;bottom:2%;z-index:8;border:0;border-radius:18px;padding:12px 20px;background:#607d8b;color:#fff;font-weight:1000;font-size:18px;box-shadow:0 5px 0 #42545d;cursor:pointer}.doa-visible-back:active{transform:translateY(4px);box-shadow:none}.doa-online-card{max-width:900px;margin:14px auto 24px;background:linear-gradient(135deg,#fff7d8,#e8fff3,#e7f8ff);border:4px solid #fff;border-radius:24px;padding:16px;text-align:center;box-shadow:0 7px 0 #c8dfd3}.doa-online-card h2{margin:0 0 6px;color:#176d4c}.doa-online-card p{margin:4px 0 10px;font-weight:800}@media(max-width:700px){.doa-visible-back{font-size:15px;padding:10px 14px}.doa-online-card{margin:10px 10px 18px;padding:13px}}
+
+
+#missionCompleteOverlay{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(16,55,42,.72);backdrop-filter:blur(5px)}
+.mission-complete-card{width:min(680px,94vw);background:linear-gradient(145deg,#fffdf1,#eafff3);border:7px solid #fff;border-radius:34px;padding:34px 30px;text-align:center;box-shadow:0 18px 55px rgba(0,0,0,.28),inset 0 0 0 4px #e4bf42}
+.mission-complete-card h2{font-size:clamp(40px,7vw,66px);margin:6px 0;color:#176d4c;text-shadow:0 3px 0 #fff}
+.mission-complete-card p{font-size:clamp(18px,2.5vw,25px);font-weight:800;line-height:1.45;margin:10px auto;max-width:570px;color:#244b40}
+.complete-medal{font-size:72px;filter:drop-shadow(0 4px 2px rgba(0,0,0,.15))}
+.complete-actions{margin-top:20px}
+@media print{#missionCompleteOverlay{display:none!important}}
+
+@media print{
+  @page{size:A4 landscape;margin:0}
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+  body>*{display:none!important}
+  #sertifikat{display:block!important;max-width:none!important;margin:0!important;padding:0!important}
+  #sertifikat>.title,#sertifikat>.nav{display:none!important}
+  #certificate{display:block!important;width:100vw;min-height:100vh;box-sizing:border-box;margin:0!important;border-radius:0!important;padding:38px 54px!important;box-shadow:none!important}
+  #certificate .certificate-note,#certificate .cert-actions,#certificate #cam,#certificate #snap,#certificate #photoCanvas,#certificate>.cert-photo:not(#childPhoto),#certificate .speak{display:none!important}
+  #certificate .cert-photo-wrap{display:flex!important}
+  #childPhoto{display:block!important}
+  #certificate:before{inset:18px!important;border-radius:0!important}
+  #certificate:after{display:block!important}
+  .cert-ribbon{display:block!important}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}
+
+.cert-main-title{font-family:Georgia,'Times New Roman',serif;font-size:clamp(34px,4.4vw,62px);letter-spacing:2px;color:#183d70;margin:6px 0 10px;position:relative;z-index:2;text-transform:uppercase}.cert-subtitle{font-family:Georgia,'Times New Roman',serif;font-size:clamp(18px,2vw,27px);margin:0 0 8px;color:#4d4d4d;position:relative;z-index:2}.cert-award-text{font-family:Georgia,'Times New Roman',serif;font-size:clamp(17px,1.7vw,24px);line-height:1.45;max-width:850px;margin:14px auto;color:#333;position:relative;z-index:2}.cert-appreciation{font-family:Georgia,'Times New Roman',serif;font-size:clamp(15px,1.45vw,21px);line-height:1.4;max-width:760px;margin:10px auto;color:#555;position:relative;z-index:2}.cert-teacher{font-family:Georgia,'Times New Roman',serif;font-size:clamp(15px,1.4vw,20px);line-height:1.45;margin:16px auto;color:#333;position:relative;z-index:2}.cert-date{font-family:Georgia,'Times New Roman',serif;font-size:clamp(15px,1.4vw,20px);margin:18px 0 0;text-align:right;padding-right:8%;color:#333;position:relative;z-index:2}
+
+/* ===== Mobile Android / iPhone compatibility layer ===== */
+html{width:100%;min-height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden}
+body{width:100%;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+img,video,iframe{max-width:100%;height:auto}
+button,a,.speak,.touch-key{touch-action:manipulation;-webkit-user-select:none;user-select:none}
+input{font-size:16px}
+@media(max-width:600px){
+  .topbar{padding:9px 10px;gap:8px;flex-wrap:wrap}
+  .topbrand{font-size:14px;line-height:1.15;max-width:72%}
+  .score{font-size:13px;padding:6px 10px}
+  .screen{padding:12px 10px 30px;width:100%;max-width:none}
+  h1{font-size:clamp(26px,8vw,42px);line-height:1.08}
+  h2{font-size:clamp(21px,6vw,32px)}
+  h3{font-size:clamp(18px,5vw,26px)}
+  .btn{max-width:100%;min-height:48px;padding:11px 15px;font-size:15px}
+  .speak{width:42px;height:42px;min-width:42px}
+  .profile{padding:12px;gap:12px;border-radius:22px}
+  .intro-video-wrap{width:100%;aspect-ratio:16/9;height:auto}
+  .intro-video{width:100%;height:100%}
+  .menu-grid{gap:10px}
+  .menu-grid .btn{width:100%;white-space:normal}
+  .map{overflow-x:auto;overflow-y:hidden;justify-content:flex-start;padding:8px 4px 14px;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+  .map>*{scroll-snap-align:center;flex:0 0 auto}
+  .bins{gap:9px}
+  .choices{gap:9px}
+  .choice,.bin{min-height:90px}
+  .sim-card,.game-card,.eval-card,.robot-card,.mission-banner{padding:12px}
+  .doa-online-top{position:relative}
+  .doa-top-actions{gap:8px}
+  .doa-top-actions .btn{width:100%}
+  .cert{border-width:9px;padding:28px 12px 24px}
+  .cert .name{min-width:0;width:100%;font-size:24px}
+  .cert-photo-wrap{width:min(58vw,190px);height:min(58vw,190px)}
+  .cert-actions .btn{width:100%}
+  .robot-ornament{right:5px!important;bottom:5px!important;transform:scale(.64)!important;transform-origin:bottom right}
+  .robot-ornament .robot-bubble{right:62px!important;max-width:125px!important;font-size:12px}
+  .touch-keyboard{padding:7px;border-radius:16px}
+  .touch-row{gap:4px;margin:4px 0}
+  .touch-key{min-width:0;min-height:45px;font-size:16px;border-radius:10px;padding:5px 2px}
+}
+@media(max-width:380px){
+  .topbrand{font-size:12px}
+  .score{font-size:12px}
+  .screen{padding-left:7px;padding-right:7px}
+  .touch-key{font-size:14px;min-height:42px}
+  .speak{width:38px;height:38px;min-width:38px;font-size:18px}
+}
+@media(orientation:landscape) and (max-height:600px){
+  .screen{padding-top:8px;padding-bottom:18px}
+  .robot-ornament{transform:scale(.55)!important}
+  .doa-stage{max-height:calc(100vh - 16px)}
+}
+
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbrand">🌍 Detektif Cilik • Penjaga Bumi <button class="speak" onclick="speak('Detektif Cilik, Penjaga Bumi')" aria-label="Dengarkan">🔊</button></div>
+<div class="score">⭐ <span id="score">0</span> poin <button class="speak" onclick="speak('Skor saat ini')" aria-label="Dengarkan skor">🔊</button></div></div>
+<div id="robotOrnament" class="robot-ornament" aria-hidden="true"><div class="robot-antenna"></div><div class="robot-light"></div><div class="robot-head"><span class="robot-eye left"></span><span class="robot-eye right"></span><span class="robot-mouth"></span></div><div class="robot-body"><span class="robot-heart">🌱</span></div><div id="robotBubble" class="robot-bubble">Halo, Detektif Cilik!</div></div>
+
+<section id="home" class="screen active">
+  <div class="hero">
+    <span class="float f1">🍃</span><span class="float f2">🌎</span><span class="float f3">🌱</span><span class="float f4">🦋</span><span class="float f5">☀️</span>
+    <div class="hero-content">
+      <h1 class="title">🌍 Petualangan Penjaga Bumi <button class="speak" onclick="speak('Petualangan Penjaga Bumi')">🔊</button></h1>
+      <p class="subtitle">Belajar • Bermain • Menjaga Lingkungan <button class="speak" onclick="speak('Belajar, bermain, menjaga lingkungan')">🔊</button></p>
+    </div>
+  </div>
+
+  <div class="profile">
+    <div class="intro-video-wrap" aria-label="Video perkenalan Ibu Lia">
+      <iframe class="intro-video" src="https://www.youtube.com/embed/oENaEwzDB_8?rel=0" title="Video Perkenalan Ibu Ely Fasliah" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    <div class="teacher-info">
+      <div class="profile-badge">👩🏻‍🏫 GURU PENDAMPING</div>
+      <h2>Ibu Lia — Ely Fasliah, S.Pd. <button class="speak" onclick="speak('Ibu Lia, Ely Fasliah, S.Pd.')">🔊</button></h2>
+      <p>KB/TK Islam Al-Azhar 4 Kebayoran Lama <button class="speak" onclick="speak('KB TK Islam Al-Azhar 4 Kebayoran Lama')">🔊</button></p>
+      <p class="tiny">🌍 Bersama Ibu Lia, yuk menjadi Penjaga Bumi!</p>
+    </div>
+  </div>
+
+  <div class="map-card">
+    <div class="map-title">🗺️ Peta Progres Petualangan <button class="speak" onclick="speak('Peta Progres Petualangan')">🔊</button></div>
+    <p class="map-hint">Sentuh ikon untuk masuk ke misi. Ikon hijau dan tanda centang berarti misi sudah selesai. <button class="speak" onclick="speak('Sentuh ikon untuk masuk ke misi. Ikon hijau dan tanda centang berarti misi sudah selesai.')">🔊</button></p>
+    <div id="map" class="map"></div>
+  </div>
+
+  <div class="name-box card" id="nameCard">
+    <h2>👧 Nama Detektif Cilik <button class="speak" onclick="speak('Nama Detektif Cilik')">🔊</button></h2>
+    <p class="tiny">Sentuh kotak nama. Gunakan keyboard layar jika tersedia.</p>
+    <input id="nameInput" type="text" inputmode="text" autocomplete="off" autocapitalize="words" enterkeyhint="done" placeholder="Contoh: Aldi" aria-label="Nama anak" onclick="showTouchKeyboard()" onfocus="showTouchKeyboard()">
+    <button class="speak" onclick="speak('Ketik nama kamu di sini')">🔊</button>
+    <div id="touchKeyboard" class="touch-keyboard" aria-label="Keyboard nama" style="display:block">
+      <div class="keyboard-label">⌨️ Keyboard Nama Detektif Cilik</div>
+      <div class="touch-row"><button type="button" class="touch-key" onclick="typeKey('Q')">Q</button><button type="button" class="touch-key" onclick="typeKey('W')">W</button><button type="button" class="touch-key" onclick="typeKey('E')">E</button><button type="button" class="touch-key" onclick="typeKey('R')">R</button><button type="button" class="touch-key" onclick="typeKey('T')">T</button><button type="button" class="touch-key" onclick="typeKey('Y')">Y</button><button type="button" class="touch-key" onclick="typeKey('U')">U</button><button type="button" class="touch-key" onclick="typeKey('I')">I</button><button type="button" class="touch-key" onclick="typeKey('O')">O</button><button type="button" class="touch-key" onclick="typeKey('P')">P</button></div>
+      <div class="touch-row"><button type="button" class="touch-key" onclick="typeKey('A')">A</button><button type="button" class="touch-key" onclick="typeKey('S')">S</button><button type="button" class="touch-key" onclick="typeKey('D')">D</button><button type="button" class="touch-key" onclick="typeKey('F')">F</button><button type="button" class="touch-key" onclick="typeKey('G')">G</button><button type="button" class="touch-key" onclick="typeKey('H')">H</button><button type="button" class="touch-key" onclick="typeKey('J')">J</button><button type="button" class="touch-key" onclick="typeKey('K')">K</button><button type="button" class="touch-key" onclick="typeKey('L')">L</button></div>
+      <div class="touch-row"><button type="button" class="touch-key" onclick="typeKey('Z')">Z</button><button type="button" class="touch-key" onclick="typeKey('X')">X</button><button type="button" class="touch-key" onclick="typeKey('C')">C</button><button type="button" class="touch-key" onclick="typeKey('V')">V</button><button type="button" class="touch-key" onclick="typeKey('B')">B</button><button type="button" class="touch-key" onclick="typeKey('N')">N</button><button type="button" class="touch-key" onclick="typeKey('M')">M</button><button type="button" class="touch-key action wide" onclick="backspaceKey()">⌫</button></div>
+      <div class="touch-row"><button type="button" class="touch-key action wide" onclick="clearName()">Hapus</button><button type="button" class="touch-key space" onclick="typeKey(' ')">Spasi</button><button type="button" class="touch-key action wide" onclick="finishNameTyping()">Selesai</button></div>
+    </div>
+    <div><button class="btn" onclick="saveName()">✨ Mulai Petualangan <span class="speak">🔊</span></button></div>
+    <p id="welcome" class="notice" style="display:none"></p>
+  </div>
+
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+<section id="doa" class="screen doa-screen">
+  <div class="doa-online-top">
+    <div><strong>▶️ Video Doa Pembuka</strong><span>Sentuh tombol untuk langsung membuka video doa di YouTube.</span></div>
+    <div class="doa-top-actions"><a class="btn next youtube-direct" href="https://youtu.be/R3DRKFGsTNg" target="_blank" rel="noopener" onclick="speak('Membuka video doa pembuka di YouTube')">▶️ Buka YouTube Doa</a><button class="btn next continue-doa" onclick="complete('doa');speak('Misi selesai, mari lanjutkan.');goNext('materi')" aria-label="Lanjutkan ke materi">➡️ Lanjutkan</button></div>
+  </div>
+  <div class="doa-stage">
+    <img class="doa-poster" src="assets/cover_doa_pembuka.png" alt="Doa Sebelum Belajar bersama Bu Lia">
+    <button class="doa-hot home-hot" onclick="goHome();speak('Kembali ke peta petualangan')" aria-label="Kembali ke beranda">⌂</button>
+    <button class="doa-hot audio-hot" onclick="toggleDoaAudio()" aria-label="Putar atau jeda audio doa">▶</button>
+    <button class="doa-hot sound-hot" onclick="toggleDoaAudio()" aria-label="Putar audio doa">🔊</button>
+    <button class="doa-hot back-hot" onclick="goHome();speak('Kembali ke peta petualangan')" aria-label="Kembali">←</button>
+    <button class="doa-visible-back" onclick="goHome();speak('Kembali ke peta petualangan')" aria-label="Kembali ke peta progres">⬅️ Kembali ke Peta Progres</button>
+    <button class="doa-hot next-hot" onclick="complete('doa');speak('Misi selesai, mari lanjutkan.');goNext('materi')" aria-label="Lanjut ke materi">→</button>
+    <button class="doa-speak text-speak" onclick="speak('Yuk, kita berdoa bersama sebelum belajar!')" aria-label="Dengarkan ajakan doa">🔊</button>
+    <div class="doa-real-audio"><audio id="doaAudio" preload="metadata"><source src="assets/doa_pembuka.mp3" type="audio/mpeg"><source src="assets/doa_pembuka.aac" type="audio/aac"></audio><div class="doa-progress"><span id="doaTime">0:00</span><input id="doaSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Posisi audio doa"><span id="doaDuration">0:00</span></div></div>
+  <div class="nav doa-nav"><button class="btn back" onclick="goHome();speak('Kembali ke peta petualangan.')">⬅️ Kembali</button><button class="btn next" onclick="complete('doa');speak('Misi selesai, mari lanjutkan.');goNext('materi')">➡️ Lanjutkan ke Materi</button></div>
+</section>
+
+<section id="materi" class="screen materi-screen">
+  <div class="materi-hero">
+    <h1>📚 Materi Pembelajaran <button class="speak" onclick="speak('Materi Pembelajaran')" aria-label="Dengarkan judul">🔊</button></h1>
+    <p>Yuk belajar mengenali sampah, memilahnya, dan menjaga bumi bersama Robot Bumi! <button class="speak" onclick="speak('Yuk belajar mengenali sampah, memilahnya, dan menjaga bumi bersama Robot Bumi!')" aria-label="Dengarkan pengantar">🔊</button></p>
+    <div class="mission-strip" aria-label="Tahapan misi materi">
+      <span class="mission-step active">① Tonton</span><span class="mission-arrow">→</span>
+      <span class="mission-step">② Kenali</span><span class="mission-arrow">→</span>
+      <span class="mission-step">③ Siap Memilah</span>
+    </div>
+  </div>
+
+  <div class="robot-card">
+    <div class="robot-avatar" aria-hidden="true">🤖🌍</div>
+    <div>
+      <h2>Pesan dari Robot Bumi <button class="speak" onclick="speak('Pesan dari Robot Bumi')">🔊</button></h2>
+      <p>“Detektif Cilik, aku punya masalah! Sampah di bumi sering tercampur. Yuk, kita belajar membedakan sampah agar bumi tetap bersih dan sehat.” <button class="speak" onclick="speak('Detektif Cilik, aku punya masalah! Sampah di bumi sering tercampur. Yuk, kita belajar membedakan sampah agar bumi tetap bersih dan sehat.')">🔊</button></p>
+    </div>
+  </div>
+
+  <div class="video-card">
+    <div class="video-heading">
+      <h2>🎬 Ayo Tonton Video Pembelajaran <button class="speak" onclick="speak('Ayo tonton video pembelajaran')" aria-label="Dengarkan judul">🔊</button></h2>
+    </div>
+    <div class="youtube-only-card">
+      <div class="youtube-icon">▶️</div>
+      <h2>Video Pembelajaran di YouTube</h2>
+      <p>Yuk, kita belajar mengenali lingkungan dan jenis sampah bersama-sama.</p>
+      <button class="btn next" onclick="window.open('https://youtu.be/GA9HqSfcyI4','_blank','noopener');speak('Membuka video materi pembelajaran di YouTube')">▶️ Buka Video Pembelajaran</button>
+      <p class="tiny">Pastikan perangkat terhubung ke internet.</p>
+    </div>
+  </div>
+
+  <h2 class="learn-title">♻️ Kenali 3 Jenis Sampah <button class="speak" onclick="speak('Kenali tiga jenis sampah')">🔊</button></h2>
+  <div class="waste-grid">
+    <article class="waste-card">
+      <div class="waste-icon">🍃🍌</div><h3>Organik <button class="speak" onclick="speak('Sampah organik')">🔊</button></h3>
+      <p>Sampah yang berasal dari makhluk hidup dan mudah terurai.</p>
+      <div class="waste-list"><span class="waste-chip">🍌 Kulit pisang</span><span class="waste-chip">🍂 Daun</span><span class="waste-chip">🍚 Sisa makanan</span></div>
+    </article>
+    <article class="waste-card anorg">
+      <div class="waste-icon">🧴♻️</div><h3>Anorganik <button class="speak" onclick="speak('Sampah anorganik')">🔊</button></h3>
+      <p>Sampah seperti plastik dan kaleng yang perlu dikelola dengan baik.</p>
+      <div class="waste-list"><span class="waste-chip">🧴 Botol plastik</span><span class="waste-chip">🥫 Kaleng</span><span class="waste-chip">📦 Kemasan</span></div>
+    </article>
+    <article class="waste-card b3">
+      <div class="waste-icon">⚠️🧪</div><h3>B3 <button class="speak" onclick="speak('Sampah B tiga')">🔊</button></h3>
+      <p>Sampah yang mengandung bahan berbahaya dan perlu penanganan khusus.</p>
+      <div class="waste-list"><span class="waste-chip">💊 Obat kedaluwarsa</span><span class="waste-chip">🧪 Cairan berbahaya</span></div>
+    </article>
+  </div>
+
+  <div class="materi-tip"><span class="tip-big">🌏💚</span>Ingat: <b>pilah sampah pada tempatnya</b> dan jangan membuang sampah sembarangan! <button class="speak" onclick="speak('Ingat, pilah sampah pada tempatnya dan jangan membuang sampah sembarangan!')">🔊</button></div>
+
+  <div class="nav"><button class="btn back" onclick="goHome();speak('Kembali ke peta petualangan')">🏠 Kembali <span class="speak">🔊</span></button>
+  <button class="btn next" onclick="complete('materi');goNext('simulasi')">➡️ Lanjutkan ke Simulasi <span class="speak">🔊</span></button></div>
+</section>
+
+<section id="simulasi" class="screen">
+  <div class="mission-banner"><div class="mission-avatar">🤖🌏</div><div class="mission-copy"><strong>Misi 3 · Rumah Sampah</strong><span>Pilih rumah yang tepat untuk setiap sampah.</span><div class="mission-progress"><i id="simProgress" style="width:20%"></i></div></div><button class="speak" onclick="speak('Misi tiga. Pilih rumah yang tepat untuk setiap sampah.')">🔊</button></div>
+  <h1 class="title">🧪 Simulasi Interaktif <button class="speak" onclick="speak('Simulasi Interaktif')">🔊</button></h1>
+  <div class="card">
+    <div class="notice">🏠 Masukkan ke dalam rumahnya <button class="speak" onclick="speak('Masukkan sampah ke dalam rumahnya yang tepat.')">🔊</button></div>
+    <div class="sim-instructions"><div class="sim-step"><b>1️⃣</b>Pilih sampah <button class="speak" onclick="speak('Pilih sampah.')">🔊</button></div><div class="sim-step"><b>2️⃣</b>Pilih rumahnya <button class="speak" onclick="speak('Pilih rumah sampah yang tepat.')">🔊</button></div><div class="sim-step"><b>3️⃣</b>Dapatkan bintang <button class="speak" onclick="speak('Dapatkan bintang dan poin.')">🔊</button></div></div>
+    <div id="simArea"></div>
+    <div class="nav"><button class="btn back" onclick="goHome()">🏠 Kembali <span class="speak">🔊</span></button>
+    <button id="simNext" class="btn next" onclick="nextSimulation()">➡️ Lanjutkan <span class="speak">🔊</span></button></div>
+  </div>
+</section>
+
+<section id="games" class="screen">
+  <div class="mission-banner"><div class="mission-avatar">🎮🌱</div><div class="mission-copy"><strong>Misi 4 · Games Penjaga Bumi</strong><span>15 tantangan untuk melatih ingatan dan kepedulianmu.</span><div class="game-progress"><i id="gameProgress" style="width:7%"></i></div></div><button class="speak" onclick="speak('Misi empat. Ada lima belas tantangan permainan.')">🔊</button></div>
+  <h1 class="title">🎮 Games Level 1–3 <button class="speak" onclick="speak('Games Level Satu sampai Tiga')">🔊</button></h1>
+  <div class="card">
+    <div class="game-levels"><span id="pill1" class="level-pill">🌱 Level 1 · Kenali <button class="speak" onclick="speak('Level satu, kenali.')">🔊</button></span><span id="pill2" class="level-pill">♻️ Level 2 · Pilah <button class="speak" onclick="speak('Level dua, pilah.')">🔊</button></span><span id="pill3" class="level-pill">🌍 Level 3 · Jaga <button class="speak" onclick="speak('Level tiga, jaga.')">🔊</button></span></div>
+    <div class="game-head"><div id="gameTitle"></div><div class="badge" id="gameCounter"></div></div>
+    <div id="gameArea" class="game-area"></div>
+    <div class="nav"><button class="btn back" onclick="goHome()">🏠 Kembali <span class="speak">🔊</span></button>
+    <button id="gameNext" class="btn next" onclick="nextGame()">➡️ Lanjutkan <span class="speak">🔊</span></button></div>
+  </div>
+</section>
+
+<section id="evaluasi" class="screen">
+  <div class="mission-banner"><div class="mission-avatar">🏆🌏</div><div class="mission-copy"><strong>Misi 5 · Tantangan Akhir</strong><span>Jawab 5 pertanyaan. Tidak perlu takut salah—coba lagi dengan teliti.</span><div class="mission-progress"><i id="evalProgress" style="width:0%"></i></div></div><button class="speak" onclick="speak('Misi lima. Jawab lima pertanyaan dengan teliti.')">🔊</button></div>
+  <h1 class="title">🏆 Evaluasi Akhir <button class="speak" onclick="speak('Evaluasi Akhir')">🔊</button></h1>
+  <div class="card"><div class="eval-summary"><span>🧠 Ayo buktikan yang sudah kamu pelajari! <button class="speak" onclick="speak('Ayo buktikan yang sudah kamu pelajari.')">🔊</button></span><span class="eval-count" id="evalCount">0 / 5 terjawab</span></div><div id="evalArea"></div>
+    <div class="nav"><button class="btn back" onclick="goHome()">🏠 Kembali <span class="speak">🔊</span></button>
+    <button class="btn next" onclick="finishEvaluation()">➡️ Selesai &amp; Lanjut <span class="speak">🔊</span></button></div>
+  </div>
+</section>
+
+<section id="doapenutup" class="screen">
+  <h1 class="title">🤲 Doa Penutup <button class="speak" onclick="speak('Doa Penutup')">🔊</button></h1>
+  <div class="card">
+    <div class="cover"><div class="big">🤲🌙</div><h2>Alhamdulillah, petualangan kita selesai.</h2><p>Audio doa penutup dapat ditambahkan oleh guru.</p></div>
+    <div class="youtube-only-card doa-close-video">
+      <div class="youtube-icon">▶️</div>
+      <h2>Video Doa Penutup</h2>
+      <p>Sentuh tombol di bawah untuk membuka doa penutup di YouTube.</p>
+      <a class="btn next" href="https://youtu.be/lKnZhDGEG-A" target="_blank" rel="noopener" onclick="speak('Membuka video doa penutup di YouTube')">▶️ Buka YouTube Doa Penutup</a>
+    </div>
+  </div>
+  <div class="nav"><button class="btn back" onclick="goHome()">🏠 Kembali <span class="speak">🔊</span></button>
+  <button class="btn next" onclick="complete('doapenutup');speak('Misi selesai, mari lanjutkan.');goNext('sertifikat')">➡️ Lanjutkan <span class="speak">🔊</span></button></div>
+</section>
+
+<section id="sertifikat" class="screen">
+  <h1 class="title">🏆 Piagam Penghargaan <button class="speak" onclick="speak('Piagam Penghargaan')">🔊</button></h1>
+  <div class="cert" id="certificate">
+    <div class="cert-ribbon" aria-hidden="true"></div>
+    <div class="cert-medal" aria-hidden="true">🏅</div>
+    <h1 class="cert-main-title">PIAGAM PENGHARGAAN</h1>
+    <p class="cert-subtitle">dengan bangga diberikan kepada:</p>
+    <div class="cert-photo-wrap" id="certPhotoWrap">
+      <img id="childPhoto" class="cert-photo" style="display:none" alt="Foto penerima piagam">
+      <div id="certPhotoPlaceholder" class="cert-photo-placeholder">📷<br>Foto penerima</div>
+    </div>
+    <div class="name" id="certChild">Detektif Cilik</div>
+    <p class="cert-award-text">Atas keberhasilannya menyelesaikan seluruh rangkaian petualangan pembelajaran <b>Penjaga Bumi</b>, serta menunjukkan semangat dalam mengenal, memilah, dan menjaga lingkungan.</p>
+    <p class="cert-appreciation">Semoga pengalaman ini menumbuhkan kepedulian, tanggung jawab, dan kecintaan terhadap lingkungan.</p>
+    <p class="cert-teacher">Diberikan bersama <b>Ibu Lia — Ely Fasliah, S.Pd.</b><br>KB/TK Islam Al-Azhar 4 Kebayoran Lama</p>
+    <p class="cert-date">Jakarta, <span id="certDate">25 September 2026</span></p>
+    <div class="cert-actions"><button class="btn" onclick="takePhoto()">📷 Ambil Foto</button><button class="btn next" onclick="printCertificate()">🖨️ Cetak / Simpan Sertifikat</button></div>
+    <video id="cam" class="media" style="display:none;max-height:280px" autoplay playsinline></video>
+    <button id="snap" class="btn next" style="display:none" onclick="snapPhoto()">📸 Gunakan Foto</button>
+    <canvas id="photoCanvas" style="display:none"></canvas>
+  </div>
+  <div class="nav"><button class="btn back" onclick="goHome()">🏠 Kembali ke Beranda <span class="speak">🔊</span></button></div>
+</section>
+
+<script>
+const menus=[
+ {id:'doa',ico:'🤲',title:'Doa Pembuka',sub:'Memulai perjalanan dengan doa'},
+ {id:'materi',ico:'📚',title:'Materi Pembelajaran',sub:'Kenali lingkungan dan jenis sampah'},
+ {id:'simulasi',ico:'🧪',title:'Simulasi Interaktif',sub:'Masukkan sampah ke rumahnya'},
+ {id:'games',ico:'🎮',title:'Games Level 1–3',sub:'Kenali, pilah, dan tantang Robot Bumi'},
+ {id:'evaluasi',ico:'🏆',title:'Evaluasi Akhir',sub:'Tunjukkan apa yang kamu pelajari'},
+ {id:'doapenutup',ico:'🤲',title:'Doa Penutup',sub:'Menutup petualangan dengan doa'},
+ {id:'sertifikat',ico:'🚩',title:'Sertifikat',sub:'Finish: Penjaga Bumi'}
+];
+let done=JSON.parse(localStorage.getItem('pb_done')||'{}'), score=Number(localStorage.getItem('pb_score')||0), childName=localStorage.getItem('pb_name')||'';
+let simIndex=Number(localStorage.getItem('pb_simIndex')||0), simSelected=null, gameIndex=Number(localStorage.getItem('pb_gameIndex')||0), evalAnswers=JSON.parse(localStorage.getItem('pb_evalAnswers')||'{}'), gameAnswered=false;
+
+function femaleVoice(){
+ const vs=window.speechSynthesis?window.speechSynthesis.getVoices():[];
+ const id=vs.filter(v=>(v.lang||'').toLowerCase().startsWith('id'));
+ const femaleHints=['female','woman','perempuan','wanita','girl','google bahasa indonesia','microsoft'];
+ return id.find(v=>femaleHints.some(h=>(v.name||'').toLowerCase().includes(h))) ||
+        id.find(v=>/google|microsoft|natural/i.test(v.name||'')) || id[0] ||
+        vs.find(v=>/indonesia/i.test(v.name||'')) || vs[0];
+}
+let speechToken=0;
+function setRobotTalking(on,text=''){
+ const r=document.getElementById('robotOrnament'),b=document.getElementById('robotBubble');
+ if(!r)return; r.classList.toggle('talking',!!on); if(b&&text)b.textContent=String(text).length>70?String(text).slice(0,67)+'…':String(text);
+}
+function speak(text){
+ const token=++speechToken; setRobotTalking(false);
+ if(!window.speechSynthesis)return;
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(text); u.lang='id-ID'; u.rate=1.0; u.pitch=.48; u.volume=1;
+ const v=femaleVoice(); if(v)u.voice=v;
+ u.onstart=()=>{if(token===speechToken)setRobotTalking(true,text)};
+ const stop=()=>{if(token===speechToken)setRobotTalking(false)}; u.onend=stop; u.onerror=stop;
+ speechSynthesis.speak(u);
+}
+if(window.speechSynthesis) speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
+
+function renderMap(){
+ const map=document.getElementById('map'); map.innerHTML='';
+ menus.forEach((m,i)=>{
+   const n=document.createElement('button'); n.className='node '+(done[m.id]?'done ':'')+(done[menus[i-1]?.id]||i===0?'current ':'');
+   n.onclick=()=>openMenu(m.id);
+   n.innerHTML='<div class="dot">'+(done[m.id]?'✓':m.ico)+'</div><div class="label">'+m.title+'</div>';
+   map.appendChild(n);
+   if(i<menus.length-1){const line=document.createElement('div');line.className='line '+(done[m.id]?'done':'');map.appendChild(line)}
+ });
+}
+function renderMenus(){
+ const g=document.getElementById('menuGrid');g.innerHTML='';
+ menus.forEach(m=>{
+  const b=document.createElement('button');b.className='menu '+(done[m.id]?'done':'');b.onclick=()=>openMenu(m.id);
+  b.innerHTML='<span class="ico">'+m.ico+'</span><span class="txt">'+m.title+' <span class="speak">🔊</span><span class="small">'+m.sub+'</span></span><span class="check">✓</span>';
+  g.appendChild(b);
+ });
+}
+function refresh(){document.getElementById('score').textContent=score;renderMap();renderMenus()}
+// Keyboard nama virtual: kompatibel dengan sentuhan IFP dan mouse/kursor laptop.
+function showTouchKeyboard(){
+ const kb=document.getElementById('touchKeyboard');
+ if(kb)kb.style.display='block';
+ const i=document.getElementById('nameInput');
+ if(i){try{i.focus({preventScroll:true})}catch(e){i.focus()}}
+}
+function typeKey(k){
+ const i=document.getElementById('nameInput');
+ if(!i)return;
+ const start=typeof i.selectionStart==='number'?i.selectionStart:i.value.length;
+ const end=typeof i.selectionEnd==='number'?i.selectionEnd:i.value.length;
+ i.value=i.value.slice(0,start)+k+i.value.slice(end);
+ const pos=start+k.length;
+ try{i.setSelectionRange(pos,pos);i.focus({preventScroll:true})}catch(e){i.focus()}
+ i.dispatchEvent(new Event('input',{bubbles:true}));
+}
+function backspaceKey(){
+ const i=document.getElementById('nameInput');
+ if(!i)return;
+ const start=typeof i.selectionStart==='number'?i.selectionStart:i.value.length;
+ const end=typeof i.selectionEnd==='number'?i.selectionEnd:i.value.length;
+ if(start!==end){i.value=i.value.slice(0,start)+i.value.slice(end);try{i.setSelectionRange(start,start)}catch(e){}}
+ else if(start>0){i.value=i.value.slice(0,start-1)+i.value.slice(start);try{i.setSelectionRange(start-1,start-1)}catch(e){}}
+ i.focus();i.dispatchEvent(new Event('input',{bubbles:true}));
+}
+function clearName(){const i=document.getElementById('nameInput');if(i){i.value='';i.focus();i.dispatchEvent(new Event('input',{bubbles:true}))}}
+function finishNameTyping(){const i=document.getElementById('nameInput');if(i)i.blur();speak('Nama sudah siap. Tekan Mulai Petualangan.')}
+function setupNameKeyboard(){
+ const kb=document.getElementById('touchKeyboard'), input=document.getElementById('nameInput');
+ if(!kb||!input)return;
+ kb.querySelectorAll('.touch-key').forEach(btn=>{
+   btn.addEventListener('mousedown',e=>e.preventDefault());
+   btn.addEventListener('pointerdown',()=>btn.classList.add('pressed'));
+   ['pointerup','pointercancel','mouseleave'].forEach(ev=>btn.addEventListener(ev,()=>btn.classList.remove('pressed')));
+ });
+ input.addEventListener('keydown',e=>{
+   if(e.key==='Enter'){e.preventDefault();finishNameTyping();}
+   else if(e.key==='Escape'){e.preventDefault();clearName();}
+ });
+}
+
+function saveName(){
+ const n=document.getElementById('nameInput').value.trim();
+ if(!n){speak('Silakan masukkan nama kamu terlebih dahulu.');return}
+ // Setiap menekan Mulai Petualangan berarti sesi anak baru dimulai dari nol.
+ ['pb_done','pb_score','pb_simIndex','pb_gameIndex','pb_evalAnswers','pb_childPhoto'].forEach(k=>localStorage.removeItem(k));
+ done={};score=0;simIndex=0;gameIndex=0;evalAnswers={};gameAnswered=false;
+ const oldPhoto=document.getElementById('childPhoto'), oldPlaceholder=document.getElementById('certPhotoPlaceholder');
+ if(oldPhoto){oldPhoto.removeAttribute('src');oldPhoto.style.display='none'} if(oldPlaceholder)oldPlaceholder.style.display='block';
+ childName=n;localStorage.setItem('pb_name',n);
+ const certChild=document.getElementById('certChild'); if(certChild) certChild.textContent=n;
+ const w=document.getElementById('welcome');w.style.display='block';w.innerHTML='🌟 Selamat datang, '+htmlEscape(n)+'! Mari kita mulai petualangan kita! <button class="speak" onclick="speak(\'Selamat datang, '+jsEscape(n)+'! Mari kita mulai petualangan kita!\')">🔊</button>';
+ speak('Selamat datang, '+n+'! Mari kita mulai petualangan kita!');
+ refresh();
+ const mc=document.querySelector('.map-card');
+ if(mc){
+   mc.classList.remove('focus');
+   void mc.offsetWidth;
+   mc.classList.add('focus');
+   mc.scrollIntoView({behavior:'smooth',block:'center'});
+   setTimeout(()=>mc.classList.remove('focus'),3200);
+ }
+ const first=document.querySelector('#map .node');
+ if(first){
+   first.setAttribute('aria-label','Misi pertama: Doa Pembuka');
+   setTimeout(()=>first.focus({preventScroll:true}),700);
+ }
+}
+function htmlEscape(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function jsEscape(s){return JSON.stringify(String(s)).slice(1,-1)}
+function openMenu(id){
+ if(id!=='doa'){
+   const idx=menus.findIndex(x=>x.id===id);
+   if(idx>0 && !done[menus[idx-1].id]){
+     speak('Selesaikan misi sebelumnya terlebih dahulu.');return;
+   }
+ }
+ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+ const target=document.getElementById(id); if(!target)return;
+ target.classList.add('active');
+ document.body.classList.toggle('doa-open',id==='doa');
+ if(id==='simulasi')renderSimulation();
+ if(id==='games')renderGame();
+ if(id==='evaluasi')renderEvaluation();
+ if(id==='doapenutup'){speak('Alhamdulillah. Kita sudah sampai di doa penutup.');}
+ if(id==='doa'){initDoaAudio();setTimeout(()=>startDoaAudio(),120);}
+ window.scrollTo({top:0,behavior:'auto'});
+}
+function fmtTime(sec){sec=Number(sec)||0;const m=Math.floor(sec/60),s=Math.floor(sec%60);return m+':'+String(s).padStart(2,'0')}
+function startDoaAudio(){const a=document.getElementById('doaAudio');if(!a)return;a.play().catch(()=>{});}
+function toggleDoaAudio(){const a=document.getElementById('doaAudio');if(!a)return;if(a.paused){a.play().catch(()=>{});speak('Audio doa pembuka dimulai')}else{a.pause();speak('Audio doa dijeda')}}
+function initDoaAudio(){const a=document.getElementById('doaAudio');const seek=document.getElementById('doaSeek');if(!a||a.dataset.ready)return;a.dataset.ready='1';a.addEventListener('loadedmetadata',()=>{document.getElementById('doaDuration').textContent=fmtTime(a.duration);});a.addEventListener('timeupdate',()=>{document.getElementById('doaTime').textContent=fmtTime(a.currentTime);if(a.duration)seek.value=(a.currentTime/a.duration)*100;});a.addEventListener('play',()=>document.querySelector('.doa-stage')?.classList.add('playing'));a.addEventListener('pause',()=>document.querySelector('.doa-stage')?.classList.remove('playing'));seek.addEventListener('input',()=>{if(a.duration)a.currentTime=(Number(seek.value)/100)*a.duration});}
+function goHome(){setRobotTalking(false);const a=document.getElementById('doaAudio');if(a){a.pause();a.currentTime=0}document.body.classList.remove('doa-open');document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('home').classList.add('active');refresh();window.scrollTo({top:0,behavior:'smooth'})}
+function goNext(id){openMenu(id)}
+function addScore(n){score+=n;localStorage.setItem('pb_score',score);refresh()}
+function complete(id){
+ done[id]=true;localStorage.setItem('pb_done',JSON.stringify(done));refresh();speak('Misi selesai, mari lanjutkan.');
+}
+function resetProgress(){localStorage.removeItem('pb_done');localStorage.removeItem('pb_score');localStorage.removeItem('pb_simIndex');localStorage.removeItem('pb_gameIndex');localStorage.removeItem('pb_evalAnswers');done={};score=0;simIndex=0;gameIndex=0;evalAnswers={};refresh();speak('Semua progres sudah diatur ulang.')}
+function applause(){
+ const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+ const A=new AC(),o=A.createOscillator(),g=A.createGain();
+ o.type='triangle';o.frequency.value=850;g.gain.setValueAtTime(.0001,A.currentTime);g.gain.exponentialRampToValueAtTime(.18,A.currentTime+.02);
+ o.connect(g);g.connect(A.destination);o.start();o.stop(A.currentTime+.14);
+ setTimeout(()=>{for(let i=0;i<5;i++)setTimeout(()=>{const c=new AC(),n=c.createOscillator(),x=c.createGain();n.frequency.value=350+Math.random()*500;x.gain.value=.06;n.connect(x);x.connect(c.destination);n.start();n.stop(c.currentTime+.07)},i*45)},120);
+}
+function updateSimProgress(){const el=document.getElementById('simProgress');if(el)el.style.width=Math.min(100,Math.max(0,(simIndex/5)*100))+'%';}
+function updateGameProgress(){const el=document.getElementById('gameProgress');if(el)el.style.width=Math.min(100,((gameIndex+1)/15)*100)+'%';[1,2,3].forEach(n=>document.getElementById('pill'+n)?.classList.toggle('active',Math.ceil((gameIndex+1)/5)===n));}
+function updateEvalProgress(){const n=Object.keys(evalAnswers).length;const el=document.getElementById('evalProgress');if(el)el.style.width=(n/5*100)+'%';const c=document.getElementById('evalCount');if(c)c.textContent=n+' / 5 terjawab';}
+function scoreBurst(points){const d=document.createElement('div');d.className='score-burst';d.textContent='+'+points+' poin! 🌟';document.body.appendChild(d);setTimeout(()=>d.remove(),800);}
+function nextSimulation(){
+ if(simIndex<5){simIndex++;localStorage.setItem('pb_simIndex',simIndex);renderSimulation()} else {complete('simulasi');localStorage.removeItem('pb_simIndex');simIndex=0;goNext('games')}
+}
+const sims=[
+ ['🍌','Kulit pisang','Organik'],['🧴','Botol plastik','Anorganik'],['💊','Obat kedaluwarsa','B3'],
+ ['🥫','Kaleng minuman','Anorganik'],['🧪','Cairan pembersih berbahaya','B3']
+];
+function renderSimulation(){
+ updateSimProgress();
+ if(simIndex>=5){document.getElementById('simArea').innerHTML='<div class="notice">🎉 Lima simulasi selesai! Kamu hebat! <button class="speak" onclick="speak(\'Lima simulasi selesai. Kamu hebat!\')">🔊</button></div>';document.getElementById('simNext').textContent='➡️ Lanjutkan';return}
+ const [ico,name,ans]=sims[simIndex];simSelected=null;
+ document.getElementById('simArea').innerHTML=
+ `<h2 style="text-align:center">Simulasi ${simIndex+1} dari 5 <button class="speak" onclick="speak('Simulasi ${simIndex+1} dari lima')">🔊</button></h2>
+ <div class="trash-row"><div class="trash" id="trashItem" draggable="true" onclick="selectTrash()" onkeydown="if(event.key==='Enter'||event.key===' ')selectTrash()" tabindex="0"><div style="font-size:50px">${ico}</div>${name}<button class="speak" onclick="event.stopPropagation();speak('${jsEscape(name)}')">🔊</button></div></div>
+ <div class="bins">
+  <button class="bin" data-answer="Organik" onclick="sortTrash('Organik')" aria-label="Tempat sampah hijau untuk sampah organik"><img src="assets/bin_organik_hijau.svg" alt="Tempat sampah hijau untuk organik"></button>
+  <button class="bin anorg" data-answer="Anorganik" onclick="sortTrash('Anorganik')" aria-label="Tempat sampah kuning untuk sampah anorganik"><img src="assets/bin_anorganik_kuning.svg" alt="Tempat sampah kuning untuk anorganik"></button>
+  <button class="bin b3" data-answer="B3" onclick="sortTrash('B3')" aria-label="Tempat sampah merah untuk B3"><img src="assets/bin_b3_merah.svg" alt="Tempat sampah merah untuk B3"></button>
+ </div><div id="simFeedback" class="feedback"></div>`;
+ const t=document.getElementById('trashItem');t.addEventListener('dragstart',()=>{simSelected=true;t.classList.add('dragging')});t.addEventListener('dragend',()=>t.classList.remove('dragging'));
+ document.querySelectorAll('.bin').forEach(b=>{b.addEventListener('dragover',e=>{e.preventDefault();b.classList.add('over')});b.addEventListener('dragleave',()=>b.classList.remove('over'));b.addEventListener('drop',()=>{b.classList.remove('over');sortTrash(b.dataset.answer)});});
+}
+function selectTrash(){simSelected=true;document.getElementById('trashItem').classList.add('selected');speak('Pilih rumah sampah yang tepat.')}
+function sortTrash(ans){
+ if(simSelected===null)simSelected=true;
+ const correct=ans===sims[simIndex][2], f=document.getElementById('simFeedback');
+ if(correct){f.className='feedback-card ok';f.innerHTML='🌟 ✓ KAMU HEBAT! <button class="speak" onclick="speak(\'Kamu hebat! Jawabanmu tepat.\')">🔊</button>';applause();speak('Kamu hebat! Jawabanmu tepat.');addScore(5);scoreBurst(5);document.querySelectorAll('.bin').forEach(b=>b.disabled=true);document.getElementById('trashItem')?.classList.remove('selected');document.getElementById('simNext').focus();}
+ else{f.className='feedback-card bad';f.innerHTML='💡 ✗ KURANG TEPAT — Coba lagi! <button class="speak" onclick="speak(\'Kurang tepat. Coba lagi.\')">🔊</button>';speak('Kurang tepat. Coba lagi.');}
+}
+
+const games=[
+ ['Level 1','Mana yang termasuk sampah organik?',['🍌 Kulit pisang','🧴 Botol plastik','🥫 Kaleng','🛍️ Kantong plastik'],'🍌 Kulit pisang'],
+ ['Level 1','Daun kering termasuk...',['Organik','Anorganik','B3','Bukan sampah'],'Organik'],
+ ['Level 1','Sisa makanan termasuk...',['Organik','Anorganik','B3','Bukan sampah'],'Organik'],
+ ['Level 1','Mana yang termasuk anorganik?',['🧴 Botol plastik','🍂 Daun','🍌 Kulit pisang','🍚 Sisa nasi'],'🧴 Botol plastik'],
+ ['Level 1','Kaleng minuman termasuk...',['Organik','Anorganik','B3','Bukan sampah'],'Anorganik'],
+ ['Level 2','Botol plastik harus dimasukkan ke...',['Organik','Anorganik','B3','Sungai'],'Anorganik'],
+ ['Level 2','Pilih pasangan yang benar.',['🍌 Kulit pisang → Organik','🍌 Kulit pisang → B3','🧴 Botol → Organik','🥫 Kaleng → Organik'],'🍌 Kulit pisang → Organik'],
+ ['Level 2','Sampah yang dapat digunakan kembali jika memungkinkan adalah...',['Botol plastik','Obat kedaluwarsa','Cairan berbahaya','Sampah makanan busuk'],'Botol plastik'],
+ ['Level 2','Kita memilah sampah agar...',['Lebih mudah dikelola','Sungai makin kotor','Sampah berserakan','Bumi panas'],'Lebih mudah dikelola'],
+ ['Level 2','Saat teman menjawab berbeda, kita...',['Mendengarkan','Mengejek','Berteriak','Pergi'],'Mendengarkan'],
+ ['Level 3','Apa yang sebaiknya dilakukan terhadap sampah plastik?',['Menggunakan kembali jika memungkinkan','Membuang ke sungai','Membuang sembarangan','Meninggalkannya di halaman'],'Menggunakan kembali jika memungkinkan'],
+ ['Level 3','Mengapa kita menjaga lingkungan?',['Agar bersih dan sehat','Agar banyak sampah','Agar air kotor','Agar hewan pergi'],'Agar bersih dan sehat'],
+ ['Level 3','Robot Bumi melihat sampah tercampur. Langkah pertama?',['Memilah','Membakar semuanya','Membuang ke sungai','Meninggalkan'],'Memilah'],
+ ['Level 3','Temanmu salah memilih tempat sampah. Kamu sebaiknya...',['Membantu dengan ramah','Menertawakan','Marah','Meninggalkan'],'Membantu dengan ramah'],
+ ['Level 3','Siapa yang dapat menjaga bumi?',['Kita semua','Robot saja','Guru saja','Orang dewasa saja'],'Kita semua']
+];
+let colorGame=false, paintColor='#2cae63', gameRenderedOptions=[];
+function renderGame(){
+ gameAnswered=false;updateGameProgress();
+ const g=games[gameIndex], level=g[0],q=g[1],opts=g[2],correct=g[3];
+ gameRenderedOptions=shuffle(opts.map(o=>({text:o,correct:o===correct})));
+ document.getElementById('gameTitle').innerHTML=`<h2>🎮 ${level} <button class="speak" onclick="speak('${level}')">🔊</button></h2>`;
+ document.getElementById('gameCounter').textContent=`Permainan ${gameIndex+1} / 15`;
+ let html=`<h2>${q} <button class="speak" onclick="speak('${jsEscape(q)}')">🔊</button></h2>`;
+ html+=`<div class="choices">`+gameRenderedOptions.map((o,i)=>`<button class="choice" onclick="answerGame(${i})">${o.text} <span class="speak" onclick="event.stopPropagation();speak('${jsEscape(o.text)}')">🔊</span></button>`).join('')+`</div>`;
+ if(gameIndex===4||gameIndex===9){html+=`<hr><h3>🎨 Bonus Mewarnai Tempat Sampah <button class="speak" onclick="speak('Bonus mewarnai tempat sampah')">🔊</button></h3><canvas id="paint" width="560" height="320"></canvas><div class="palette">${['#2cae63','#2b9bd0','#e74c3c','#f4c542','#9b59b6','#ffffff'].map(c=>`<button class="swatch" style="background:${c}" onclick="paintColor='${c}'"></button>`).join('')}</div><p class="tiny">Sentuh dan usap gambar untuk mewarnai. <button class="speak" onclick="speak('Sentuh dan usap gambar untuk mewarnai.')">🔊</button></p>`}
+ document.getElementById('gameArea').innerHTML=html;
+ if(gameIndex===4||gameIndex===9)setupCanvas();
+}
+function answerGame(i){
+ if(gameAnswered)return;
+ const rendered=gameRenderedOptions[i],choice=rendered?.text,btn=document.querySelectorAll('#gameArea .choice')[i];
+ if(rendered?.correct){gameAnswered=true;const pts=gameIndex<5?10:gameIndex<10?10:15;addScore(pts);scoreBurst(pts);speak('Benar. Kamu hebat!');applause();btn.classList.add('correct');document.querySelectorAll('#gameArea .choice').forEach(x=>x.disabled=true);document.getElementById('gameNext').focus();}
+ else{btn.classList.add('wrong');speak('Kurang tepat. Coba lagi.');setTimeout(()=>btn.classList.remove('wrong'),650)}
+}
+
+function nextGame(){
+ if(!gameAnswered){speak('Jawab pertanyaan ini terlebih dahulu.');return}
+ if(gameIndex<14){gameIndex++;localStorage.setItem('pb_gameIndex',gameIndex);renderGame()}
+ else{complete('games');localStorage.removeItem('pb_gameIndex');gameIndex=0;goNext('evaluasi')}
+}
+function setupCanvas(){
+ const c=document.getElementById('paint'),ctx=c.getContext('2d');ctx.lineWidth=18;ctx.lineCap='round';
+ ctx.fillStyle='#f8fffb';ctx.fillRect(0,0,c.width,c.height);
+ ctx.strokeStyle='#4b7a70';ctx.lineWidth=7;
+ ctx.beginPath();if(ctx.roundRect){ctx.roundRect(190,65,180,200,25)}else{ctx.rect(190,65,180,200)}ctx.stroke();
+ ctx.beginPath();ctx.moveTo(170,65);ctx.lineTo(390,65);ctx.stroke();
+ ctx.beginPath();ctx.arc(280,165,70,0,Math.PI*2);ctx.stroke();
+ function draw(e){const r=c.getBoundingClientRect();const x=(e.clientX-r.left)*c.width/r.width,y=(e.clientY-r.top)*c.height/r.height;ctx.strokeStyle=paintColor;ctx.lineWidth=20;ctx.lineTo(x,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y)}
+ c.addEventListener('pointerdown',e=>{ctx.beginPath();const r=c.getBoundingClientRect();ctx.moveTo((e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height);c.setPointerCapture(e.pointerId);c.onpointermove=draw});
+ c.addEventListener('pointerup',()=>{c.onpointermove=null});
+}
+let evalRenderedOptions=[];
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;}
+const evalQs=[
+ ['Mana yang termasuk sampah organik?',['🍌 Kulit pisang','🧴 Botol plastik','🥫 Kaleng','🛍️ Kantong plastik'],'🍌 Kulit pisang'],
+ ['Botol plastik termasuk...',['Organik','Anorganik'],'Anorganik'],
+ ['Apa yang sebaiknya kita lakukan terhadap sampah?',['Memilah','Membuang sembarangan'],'Memilah'],
+ ['Mengapa kita menjaga lingkungan?',['Agar lingkungan bersih dan sehat','Agar banyak sampah'],'Agar lingkungan bersih dan sehat'],
+ ['Siapa yang dapat menjaga bumi?',['Kita semua','Robot saja'],'Kita semua']
+];
+function renderEvaluation(){
+ const a=document.getElementById('evalArea');a.innerHTML='';updateEvalProgress();
+ evalRenderedOptions=[];
+ evalQs.forEach((q,i)=>{
+  const d=document.createElement('div');d.className='eval-q';
+  evalRenderedOptions[i]=shuffle(q[1]);
+  d.innerHTML=`<h3>${i+1}. ${q[0]} <button class="speak" onclick="speak('${jsEscape(q[0])}')">🔊</button></h3>`+
+   evalRenderedOptions[i].map(o=>`<button class="choice" onclick="evalPick(${i},'${jsEscape(o)}',this)">${o} <span class="speak" onclick="event.stopPropagation();speak('${jsEscape(o)}')">🔊</span></button>`).join(' ');
+  a.appendChild(d);
+ });
+}
+function evalPick(i,o,el){evalAnswers[i]=o;localStorage.setItem('pb_evalAnswers',JSON.stringify(evalAnswers));document.querySelectorAll('.eval-q')[i].querySelectorAll('.choice').forEach(x=>x.classList.remove('correct','wrong'));el.classList.add(o===evalQs[i][2]?'correct':'wrong');updateEvalProgress();speak(o===evalQs[i][2]?'Benar.':'Kurang tepat. Coba lagi.')}
+function finishEvaluation(){
+ const ok=evalQs.every((q,i)=>evalAnswers[i]===q[2]);
+ if(!ok){speak('Coba jawab semua pertanyaan dengan lebih teliti.');return}
+ addScore(5);localStorage.removeItem('pb_evalAnswers');evalAnswers={};complete('evaluasi');goNext('doapenutup');
+}
+function takePhoto(){
+ const v=document.getElementById('cam');
+ if(!navigator.mediaDevices?.getUserMedia){speak('Kamera tidak tersedia di perangkat ini.');return}
+ v.style.display='block';document.getElementById('snap').style.display='inline-block';
+ navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1280},height:{ideal:720}}}).then(s=>{v.srcObject=s;v.play().catch(()=>{});}).catch(()=>speak('Kamera belum tersedia atau izin kamera belum diberikan.'));
+}
+function snapPhoto(){
+ const v=document.getElementById('cam'),c=document.getElementById('photoCanvas'),img=document.getElementById('childPhoto'),ph=document.getElementById('certPhotoPlaceholder');
+ c.width=v.videoWidth||1280;c.height=v.videoHeight||720;
+ c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+ const data=c.toDataURL('image/jpeg',0.95);
+ img.src=data;img.style.display='block';ph.style.display='none';
+ localStorage.setItem('pb_childPhoto',data);
+ v.srcObject?.getTracks().forEach(t=>t.stop());v.srcObject=null;v.style.display='none';document.getElementById('snap').style.display='none';
+ speak('Foto berhasil dimasukkan ke sertifikat.');
+}
+function loadChildPhoto(){
+ const data=localStorage.getItem('pb_childPhoto');
+ if(!data)return;
+ const img=document.getElementById('childPhoto'),ph=document.getElementById('certPhotoPlaceholder');
+ img.src=data;img.style.display='block';ph.style.display='none';
+}
+function showMissionCompleteFeedback(){
+ const old=document.getElementById('missionCompleteOverlay'); if(old)old.remove();
+ const overlay=document.createElement('div'); overlay.id='missionCompleteOverlay';
+ overlay.innerHTML=`<div class="mission-complete-card">
+   <div class="complete-medal">🏅</div>
+   <h2>🎉 SELAMAT!</h2>
+   <p>Misi selesai, <b>${htmlEscape(childName||'Detektif Cilik')}</b>!</p>
+   <p>Kamu telah menyelesaikan seluruh petualangan <b>Penjaga Bumi</b> dan berhasil mendapatkan Piagam Penghargaan.</p>
+   <div class="complete-actions"><button class="btn next" onclick="startNewChild()">🌱 Mulai untuk Anak Berikutnya</button></div>
+ </div>`;
+ document.body.appendChild(overlay);
+ speak('Selamat! Misi selesai. Kamu telah menyelesaikan seluruh petualangan Penjaga Bumi.');
+ setTimeout(()=>startNewChild(),4200);
+}
+function clearChildData(){
+ setRobotTalking(false);
+ ['pb_done','pb_score','pb_simIndex','pb_gameIndex','pb_evalAnswers','pb_name','pb_childPhoto'].forEach(k=>localStorage.removeItem(k));
+ done={};score=0;simIndex=0;gameIndex=0;evalAnswers={};childName='';simSelected=null;gameAnswered=false;
+ const ni=document.getElementById('nameInput'); if(ni){ni.value='';try{ni.focus({preventScroll:true})}catch(e){}}
+ const w=document.getElementById('welcome'); if(w)w.innerHTML='';
+ const img=document.getElementById('childPhoto'),ph=document.getElementById('certPhotoPlaceholder');
+ if(img){img.removeAttribute('src');img.style.display='none'} if(ph)ph.style.display='block';
+ const certName=document.getElementById('certName');if(certName)certName.textContent='Detektif Cilik';
+ const certChild=document.getElementById('certChild');if(certChild)certChild.textContent='Detektif Cilik';
+ const cam=document.getElementById('cam');if(cam){cam.srcObject?.getTracks().forEach(t=>t.stop());cam.srcObject=null;cam.style.display='none'}
+ const snap=document.getElementById('snap');if(snap)snap.style.display='none';
+ refresh();
+}
+function startNewChild(){
+ const ov=document.getElementById('missionCompleteOverlay');if(ov)ov.remove();
+ clearChildData();
+ goHome();
+ setTimeout(()=>{const i=document.getElementById('nameInput');if(i){try{i.focus({preventScroll:true})}catch(e){i.focus()}}},250);
+}
+function printCertificate(){
+ if(!localStorage.getItem('pb_childPhoto')){speak('Ambil foto terlebih dahulu agar foto anak masuk ke sertifikat.');alert('Silakan tekan “Ambil Foto” dan “Gunakan Foto” terlebih dahulu. Foto anak wajib dimasukkan ke sertifikat sebelum dicetak atau disimpan sebagai PDF.');return}
+ window.__certificatePrinting=true;
+ window.print();
+}
+window.addEventListener('afterprint',()=>{
+ if(window.__certificatePrinting){window.__certificatePrinting=false;showMissionCompleteFeedback();}
+});
+function init(){
+ if(childName)document.getElementById('nameInput').value=childName;
+ document.getElementById('certName').textContent=childName||'Detektif Cilik';document.getElementById('certChild').textContent=childName||'Detektif Cilik';const now=new Date();const months=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];document.getElementById('certDate').textContent=now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+ loadChildPhoto();
+ setupNameKeyboard();
+ refresh();
+}
+init();
+</script>
+<script>if("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}</script>
+</body></html>

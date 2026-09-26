@@ -1,0 +1,11 @@
+{
+  "name":"Detektif Cilik – Penjaga Bumi",
+  "short_name":"Penjaga Bumi",
+  "start_url":"./index.html",
+  "display":"standalone",
+  "orientation":"any",
+  "background_color":"#dff7d4",
+  "theme_color":"#23a55b",
+  "lang":"id-ID",
+  "description":"Aplikasi pembelajaran interaktif Detektif Cilik – Penjaga Bumi."
+}
